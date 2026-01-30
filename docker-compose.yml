@@ -1,10 +1,10 @@
-version: '3.9'
+version: "3.9"
 
 services:
   postgres:
     image: postgres:16
     environment:
-      POSTGRES_DB: observabilty
+      POSTGRES_DB: observability
       POSTGRES_USER: obs_user
       POSTGRES_PASSWORD: obs_pass
     ports:
@@ -21,6 +21,12 @@ services:
     build: ./api-node
     ports:
       - '3000:3000'
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: observability
+      POSTGRES_USER: obs_user
+      POSTGRES_PASSWORD: obs_pass
+      REDIS_HOST: redis
     depends_on:
       - postgres
       - redis
