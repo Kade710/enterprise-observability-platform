@@ -3,7 +3,10 @@ const { Pool } = require("pg")
 const redis = require("redis")
 
 const app = express();
-const PORT= 3000;
+const PORT = process.env.PORT || 3000;
+
+// This line allows my API to automatically parse JSON request bodies
+app.use(express.json());
 
 // Postgres connection
 const pool = new Pool({
@@ -22,7 +25,12 @@ const redisClient = redis.createClient({
     },
 });
 
-redisClient.connect().catch((err) => console.error("Redis connect error:", err));
+redisClient.connect()
+    .then(() => console.log("Redis connected"))
+    .catch(err => {
+        console.error("Redis connect error:", err);
+        process.exit(1);
+});
 
 // Health Endpoint
 app.get('/api/health', (req, res) => {
